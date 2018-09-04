@@ -2,15 +2,14 @@ require 'pry'
 
 class Pokemon
 
-    attr_accessor :name, :type, :id, :db, :hp
+    attr_accessor :name, :type, :id, :db
 
-    @@all = []
-    def initialize(props={})
-        @name = props['name'] 
-        @type = props['type']
+    def initialize(name:, type:, id:, db:)
+        @name = name
+        @type = type
         @db = db
-        @id = props['id']
-        @hp = props['hp']
+        @id = id
+        # @hp = hp
     end
 
 
@@ -23,21 +22,25 @@ class Pokemon
     end
 
     def self.find(id, db)
-
         sql = <<-SQL
             SELECT * FROM pokemon WHERE id = ?;
         SQL
-
         test = db.execute(sql, id)
         # binding.pry
-
-        # found = test.map do |result|
-        Pokemon.new('name' => test.first[1], 'id' => test.first[0], 'type' => test.first[2])
-        # end
-
-        # found
+        Pokemon.new(name: test.first[1], type: test.first[2], db: db, id: test.first[0])
     end
 
+    # def alter_hp(hp, db)
+    #     sql = <<-SQL
+    #     UPDATE pokemon SET hp = ? WHERE name = 'Pikachu';
+    #     SQL
+
+    #     poki_hp = db.execute(sql, hp)
+
+    #     # Pokemon.new('' => test.first[1], 'id' => test.first[0], 'type' => test.first[2], )
+    #     # binding.pry
+# 
+        # end
     
 
     
